@@ -1,0 +1,12 @@
+<li>
+<div *ngIf="!edit; else editForm">
+  <p>{{title}}</p>
+  <button (click)="startEdit()">Edit</button>
+ </div>
+</li>
+<ng-template #editForm>
+  <form>
+    <input value="{{title}}" #edit (keyup.enter)="editEnd(edit.value)">
+    <button (click)="editEnd(edit.value)">Submit</button>
+  </form>
+</ng-template>

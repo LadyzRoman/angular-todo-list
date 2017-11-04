@@ -5,6 +5,15 @@ import { Component } from '@angular/core';
   templateUrl: './app.component.html',
   styleUrls: ['./app.component.css']
 })
+
 export class AppComponent {
-  title = 'app';
+  todos = [];
+
+  addNew() {
+    this.todos[this.todos.length] = {title: '', active: true, edit: true};
+  }
+
+  delElement(todo: any) {
+    this.todos = this.todos.filter( e => e !== todo);
+  }
 }
