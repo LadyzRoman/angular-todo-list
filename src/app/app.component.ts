@@ -1,5 +1,5 @@
 import {Component, OnInit} from '@angular/core';
-import {Todo} from "./shared/Todo";
+import {TodoModel} from "./models/todo.model";
 import {HostListener} from "@angular/core";
 
 @Component({
@@ -9,11 +9,12 @@ import {HostListener} from "@angular/core";
 
 export class AppComponent implements OnInit {
 
-  todos: Todo[] = [];
+  todos: TodoModel[] = [];
 
   addNew() {
     this.todos.forEach(t => t.edit = false);
-    this.todos.unshift(new Todo('', true));
+    this.todos.forEach(t => t.active = false);
+    this.todos.unshift(new TodoModel('', true, true, false));
   }
 
   delElement(todo: {title: string, edit: boolean}) {
@@ -27,8 +28,24 @@ export class AppComponent implements OnInit {
   }
 
   ngOnInit() {
-    this.todos = JSON.parse(sessionStorage.getItem('todoList'));
+    this.todos = <TodoModel[]>JSON.parse(sessionStorage.getItem('todoList'));
     if (this.todos == null)
       this.todos = [];
+    for (let i = 0; i < this.todos.length; i++)
+    {
+      let todo = this.todos[i];
+      this.todos[i] = new TodoModel(todo.title, todo.edit, todo.active, todo.complete);
+    }
+  }
+
+  editElement(todo: TodoModel) {
+    this.todos.forEach(t => t.edit = false);
+    todo.edit = true;
+  }
+
+  activateElement(todo: TodoModel) {
+    if (todo.active) return;
+    this.todos.forEach(t => {t.edit = false; t.active = false; });
+    todo.active = true;
   }
 }
