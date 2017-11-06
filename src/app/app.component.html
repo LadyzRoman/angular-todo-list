@@ -5,12 +5,18 @@
 
 <button class="btn btn-primary btn-block" (click)="addNew()">Add New</button>
 <ul class="list-group">
-  <ng-template ngFor let-todo [ngForOf]="todos">
-    <li class="list-group-item">
-      <div class="row">
-        <app-todo-element [todo]="todo"></app-todo-element>
-        <button class="btn btn-danger btn-md col-sm-1" (click)="delElement(todo)">Delete</button>
+  <li class="list-group-item" *ngFor="let todo of todos" (click)="activateElement(todo)"
+      [ngClass]="{'list-group-item-success' : todo.complete}">
+    <div class="row">
+      <app-todo-element [todo]="todo"></app-todo-element>
+      <div *ngIf="todo.active && !todo.edit">
+        <div *ngIf="!todo.complete" class="btn-group">
+          <button class="btn btn-success"(click)="editElement(todo)">Edit</button>
+        </div>
+        <div class="btn-group">
+          <button class="btn btn-danger" (click)="delElement(todo)">Delete</button>
+        </div>
       </div>
-    </li>
-  </ng-template>
+    </div>
+  </li>
 </ul>
