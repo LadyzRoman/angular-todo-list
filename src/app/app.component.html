@@ -1,14 +1,16 @@
-<h1> TODO List </h1>
 
-<button (click)="addNew()">Add New</button>
-<ul>
+<div class="page-header">
+  <h1 class="text-center text-success"> TODO List </h1>
+</div>
+
+<button class="btn btn-primary btn-block" (click)="addNew()">Add New</button>
+<ul class="list-group">
   <ng-template ngFor let-todo [ngForOf]="todos">
-    <app-todo-element [title]="todo.title" [edit]="todo.edit"></app-todo-element>
-    <button (click)="delElement(todo)">Delete</button>
+    <li class="list-group-item">
+      <div class="row">
+        <app-todo-element [todo]="todo"></app-todo-element>
+        <button class="btn btn-danger btn-md col-sm-1" (click)="delElement(todo)">Delete</button>
+      </div>
+    </li>
   </ng-template>
-  <!--
-<app-todo-element *ngFor="let todo of todos" [title]="todo.title" [edit]="todo.edit">
-  <button (click)="delElement(todo)">Delete</button>
-</app-todo-element>
--->
 </ul>

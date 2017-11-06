@@ -1,23 +1,16 @@
 
 
 import {Component, Input} from "@angular/core";
+import {Todo} from "./shared/Todo";
 
 @Component({
   selector: 'app-todo-element',
   templateUrl: './todo.component.html'
 })
 export class TodoComponent {
-  @Input() title: string;
-  active: boolean;
-  @Input() edit: boolean;
+  @Input() todo: Todo;
 
-  editEnd(value: string) {
-    this.title = value;
-    this.edit = false;
+  toggleEdit() {
+    this.todo.toggleEdit();
   }
-
-  startEdit() {
-    this.edit = true;
-  }
-
 }
