@@ -1,20 +1,13 @@
 export class TodoModel
 {
+  id: number;
   title: string;
-  edit: boolean;
-  active: boolean;
   complete: boolean;
 
-  constructor(title: string, edit: boolean, active: boolean, complete: boolean) {
+  constructor(id: number, title: string, complete: boolean) {
+    this.id = id;
     this.title = title;
-    this.edit = edit;
-    this.active = active;
     this.complete = complete;
-  }
-
-  toggleEdit()
-  {
-    this.edit = !this.edit;
   }
 
   toggleComplete() {

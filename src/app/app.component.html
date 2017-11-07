@@ -8,10 +8,10 @@
   <li class="list-group-item" *ngFor="let todo of todos" (click)="activateElement(todo)"
       [ngClass]="{'list-group-item-success' : todo.complete}">
     <div class="row">
-      <app-todo-element [todo]="todo"></app-todo-element>
-      <div *ngIf="todo.active && !todo.edit">
+      <app-todo-element [todo]="todo" [active]="active === todo.id" [(edited)]="edited" ></app-todo-element>
+      <div *ngIf="(todo.id === active) && !edited">
         <div *ngIf="!todo.complete" class="btn-group">
-          <button class="btn btn-success"(click)="editElement(todo)">Edit</button>
+          <button class="btn btn-success" (click)="editElement()">Edit</button>
         </div>
         <div class="btn-group">
           <button class="btn btn-danger" (click)="delElement(todo)">Delete</button>

@@ -10,42 +10,48 @@ import {HostListener} from "@angular/core";
 export class AppComponent implements OnInit {
 
   todos: TodoModel[] = [];
+  active: number;
+  edited: boolean;
+  globalIndex: number;
 
   addNew() {
-    this.todos.forEach(t => t.edit = false);
-    this.todos.forEach(t => t.active = false);
-    this.todos.unshift(new TodoModel('', true, true, false));
+    this.todos.unshift(new TodoModel(this.globalIndex++ , '', false));
+    this.active = this.globalIndex - 1;
+    this.edited = true;
   }
 
-  delElement(todo: {title: string, edit: boolean}) {
+  delElement(todo: TodoModel) {
     this.todos = this.todos.filter( t => t !== todo);
+    this.active = -1;
   }
 
   @HostListener('window:beforeunload')
   saveData()
   {
       sessionStorage.setItem('todoList', JSON.stringify(this.todos));
+      sessionStorage.setItem('active', this.active.toString());
+      sessionStorage.setItem('globalIndex', this.globalIndex.toString());
   }
 
   ngOnInit() {
-    this.todos = <TodoModel[]>JSON.parse(sessionStorage.getItem('todoList'));
-    if (this.todos == null)
-      this.todos = [];
+    this.todos = <TodoModel[]>JSON.parse(sessionStorage.getItem('todoList')) || [];
     for (let i = 0; i < this.todos.length; i++)
     {
       let todo = this.todos[i];
-      this.todos[i] = new TodoModel(todo.title, todo.edit, todo.active, todo.complete);
+      this.todos[i] = new TodoModel(todo.id, todo.title, todo.complete);
     }
+    this.globalIndex = parseInt(sessionStorage.getItem('globalIndex'), 10) || 0;
+    this.active = parseInt(sessionStorage.getItem('active'), 10) || 0;
+
   }
 
-  editElement(todo: TodoModel) {
-    this.todos.forEach(t => t.edit = false);
-    todo.edit = true;
+  editElement() {
+    this.edited = true;
   }
 
   activateElement(todo: TodoModel) {
-    if (todo.active) return;
-    this.todos.forEach(t => {t.edit = false; t.active = false; });
-    todo.active = true;
+    if (this.active === todo.id) return;
+    this.active = todo.id;
+    this.edited = false;
   }
 }
