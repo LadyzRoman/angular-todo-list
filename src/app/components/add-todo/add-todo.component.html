@@ -1,0 +1,19 @@
+<form novalidate class="input-group col-sm-12"
+      [formGroup]="addForm"
+      [ngClass]="{'has-error': !addForm.valid, 'has-success': addForm.valid}"
+      (submit)="handleSubmit(addForm.value)">
+  <label class="input-group-addon">Title</label>
+  <input class="form-control"
+         formControlName="title"
+         placeholder="Todo"/>
+  <div class="input-group-btn">
+    <button class="btn btn-success" type="submit"
+            [disabled]="!addForm.valid">
+      Add
+    </button>
+  </div>
+</form>
+
+<div class="alert alert-danger" [hidden]="addForm.valid || addForm.untouched">
+  Min length < 3 or empty string
+</div>

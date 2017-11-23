@@ -1,0 +1,27 @@
+<ul class="list-group">
+  <li class="list-group-item" *ngFor="let todo of todoList"
+      (click)="todoClick(todo.id)"
+      [ngClass]="{'list-group-item-success' : todo.complete}">
+    <div class="row">
+      <div *ngIf="edited !== todo.id; else editForm">
+        <div class="col-sm-1">
+          <input type="checkbox" [checked]="todo.complete"/>
+        </div>
+        <div class="col-sm-8 content">
+          <h4>{{todo.title}}</h4>
+        </div>
+        <div>
+          <div *ngIf="!todo.complete" class="col-sm-1">
+            <button class="btn btn-success" (click)="toggleEdit(todo.id, $event)">Edit</button>
+          </div>
+          <div class="col-sm-1" [ngClass]="{'col-sm-offset-1': todo.complete}">
+            <button class="btn btn-danger" (click)="deleteElement(todo.id)">Delete</button>
+          </div>
+        </div>
+      </div >
+      <ng-template #editForm>
+        <app-edit-todo [todo]="todo" (todoChange)="toggleEdit(todo.id)"></app-edit-todo>
+      </ng-template>
+    </div>
+  </li>
+</ul>
