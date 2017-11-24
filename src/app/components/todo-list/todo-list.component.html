@@ -5,23 +5,54 @@
     <div class="row">
       <div *ngIf="edited !== todo.id; else editForm">
         <div class="col-sm-1">
-          <input type="checkbox" [checked]="todo.complete"/>
+          <input type="checkbox" [checked]="todo.complete" [disabled]="!todo.isSubTodosComplete()"/>
         </div>
         <div class="col-sm-8 content">
           <h4>{{todo.title}}</h4>
         </div>
         <div>
-          <div *ngIf="!todo.complete" class="col-sm-1">
-            <button class="btn btn-success" (click)="toggleEdit(todo.id, $event)">Edit</button>
+          <div class="col-sm-1" *ngIf="todo.hasSubTodos()" >
+            <button class="btn btn-link" (click)="toggleSubTodos(todo.id, $event)">
+              <i *ngIf="active !== todo.id" class="glyphicon glyphicon-chevron-down"></i>
+              <i *ngIf="active === todo.id" class="glyphicon glyphicon-chevron-left"></i>
+            </button>
           </div>
-          <div class="col-sm-1" [ngClass]="{'col-sm-offset-1': todo.complete}">
-            <button class="btn btn-danger" (click)="deleteElement(todo.id)">Delete</button>
+          <div class="col-sm-1"
+               [ngClass]="{'col-sm-offset-1': !todo.hasSubTodos()}"
+               *ngIf="!todo.complete">
+            <button class="btn btn-success"
+                    (click)="toggleEdit(todo.id, $event)">
+              <i class="glyphicon glyphicon-pencil"></i>
+            </button>
+          </div>
+          <div class="col-sm-1"
+               [ngClass]="{'col-sm-offset-1': todo.complete && todo.hasSubTodos(),
+                'col-sm-offset-2': todo.complete && !todo.hasSubTodos()}">
+            <button class="btn btn-danger" (click)="deleteElement(todo.id)">
+              <i class="glyphicon glyphicon-remove"></i>
+            </button>
           </div>
         </div>
-      </div >
+      </div>
       <ng-template #editForm>
         <app-edit-todo [todo]="todo" (todoChange)="toggleEdit(todo.id)"></app-edit-todo>
       </ng-template>
     </div>
+    <div *ngIf="active === todo.id" class="row">
+      <div *ngFor="let subTodo of todo.subTodos" class="col-sm-12"
+      (click)="switchSubTodoStatus(subTodo.id, $event)"
+      >
+        <div class="row" [ngClass]="{'bg-success':subTodo.complete}">
+          <div class="col-sm-1 col-sm-offset-1">
+            <input type="checkbox"
+                   [checked]="subTodo.complete"
+                   [disabled]="todo.complete"
+            />
+          </div>
+          <p class="col-sm-10">{{subTodo.title}}</p>
+        </div>
+      </div>
+    </div>
+
   </li>
 </ul>

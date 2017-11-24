@@ -7,6 +7,7 @@ import {ITodo, TodoModel} from "../models/todo.model";
 export class TodoService
 {
   todoList: Array<TodoModel> = [];
+  initialId: number = 24332;
 
   constructor() {
   }
@@ -15,6 +16,14 @@ export class TodoService
   {
     return this.todoList;
   }
+
+  getTodoById(id: number): TodoModel
+  {
+    let index = this.todoList.findIndex(todo => todo.id === id);
+    return this.todoList[index];
+  }
+
+
 
   deleteTodo(id: number)
   {
@@ -31,5 +40,10 @@ export class TodoService
   {
     let todoIndex = this.todoList.findIndex(t => t.id === todo.id);
     this.todoList[todoIndex] = todo;
+  }
+
+  getNextId()
+  {
+    return this.initialId++;
   }
 }

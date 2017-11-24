@@ -1,9 +1,50 @@
-<form [formGroup]="editForm" (submit)="handleEdit(editForm.value)"
-  class="input-group col-sm-10 col-sm-offset-1">
-    <input formControlName="title" class="form-control" ngDefaultControl/>
-    <div class="input-group-btn">
-      <button class="btn btn-success" type="submit">
-        Submit
-      </button>
+<form novalidate class="row"
+      [formGroup]="editForm"
+      (submit)="handleSubmit(editForm.value)">
+  <div class="col-sm-offset-1 col-sm-10">
+    <div class="input-group row"
+         [ngClass]="{
+        'has-error': editForm.controls.title.hasError('minlength') || editForm.controls.title.hasError('required'),
+         'has-success': !editForm.controls.title.hasError('minlength') || !editForm.controls.title.hasError('required')}"
+    >
+      <label class="input-group-addon">Title</label>
+      <input class="form-control"
+             formControlName="title"
+             placeholder="Todo"/>
+      <div class="input-group-btn">
+        <button class="btn btn-success" type="button" (click)="addSubTodo()">
+          <i class="glyphicon glyphicon-plus"></i>
+        </button>
+      </div>
     </div>
+    <hr/>
+    <div class="row" formArrayName="subTodos">
+      <div class="input-group sub-todo"
+           *ngFor="let subTodo of subTodos.controls; let i = index"
+           [formGroup]="subTodos.controls[i]"
+           [ngClass]="{
+        'has-error': subTodo.controls.title.hasError('required') || subTodo.controls.title.hasError('minlength'),
+         'has-success': !subTodo.controls.title.hasError('required') && !subTodo.controls.title.hasError('minlength')}">
+        <label class="input-group-addon">SubTodo</label>
+        <input class="form-control" formControlName="title"/>
+        <div class="input-group-btn">
+          <button class="btn btn-danger" type="button" (click)="removeSubTodo(i)">
+            <i class="glyphicon glyphicon-remove"></i>
+          </button>
+        </div>
+      </div>
+    </div>
+    <div class="row">
+      <div class="col-sm-2">
+        <button class="btn btn-success" type="submit"
+                [disabled]="!editForm.valid">
+          Confirm
+        </button>
+      </div>
+      <p [hidden]="editForm.valid"
+         class="col-sm-10 text-danger danger">
+        {{getErrorMessage()}}
+      </p>
+    </div>
+  </div>
 </form>

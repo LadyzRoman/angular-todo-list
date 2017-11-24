@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import {FormControl, FormGroup, Validators} from "@angular/forms";
+import {FormArray, FormControl, FormGroup, Validators} from "@angular/forms";
 import {TodoService} from "../../services/todo.service";
 import {TodoModel} from "../../models/todo.model";
 
@@ -11,28 +11,59 @@ import {TodoModel} from "../../models/todo.model";
 export class AddTodoComponent implements OnInit {
 
   addForm : FormGroup;
-  private initialId: number = 14681327;
+
+  get subTodos() : FormArray {
+    return this.addForm.get('subTodos') as FormArray;
+  }
+
 
   constructor(private todoService: TodoService) { }
 
   ngOnInit() {
-    this.addForm = new FormGroup({
-      id: new FormControl(this.initialId++),
-      title: new FormControl('',[Validators.required,
-        Validators.minLength(3)])
-    });
+    this.refreshForm();
   }
 
 
   handleSubmit(value: any) {
-    console.log(value);
     this.todoService.addTodo(Object.assign(new TodoModel(), value));
-    //this.addForm.reset();
+    this.refreshForm()
+  }
 
+  refreshForm()
+  {
     this.addForm = new FormGroup({
-      id: new FormControl(this.initialId++),
+      id: new FormControl(this.todoService.getNextId()),
+      title: new FormControl('',[Validators.required,
+        Validators.minLength(3)]),
+      subTodos: new FormArray([])
+    });
+  }
+
+  addSubTodo()
+  {
+    this.subTodos.push(new FormGroup({
+      id: new FormControl(this.todoService.getNextId()),
       title: new FormControl('',[Validators.required,
         Validators.minLength(3)])
-    });
+    }))
+  }
+
+  removeSubTodo(index: number) {
+    this.subTodos.removeAt(index);
+  }
+
+  getErrorMessage() {
+    if (this.addForm.controls.title.hasError('required'))
+      return 'Title is required';
+    else if (this.addForm.controls.title.hasError('minlength'))
+      return 'Min length must be gr. than 3';
+    else if(this.subTodos.length > 0) {
+      if ((!this.subTodos.controls
+          .every(control => !(control as FormGroup).controls['title'].hasError('required'))))
+        return 'Sub todo title is required';
+      if ((!this.subTodos.controls
+          .every(control => !(control as FormGroup).controls['title'].hasError('minlength'))))
+        return 'Sub todo min length must be gr. than 3';
+    }
   }
 }
