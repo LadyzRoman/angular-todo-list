@@ -15,12 +15,6 @@ export class AppComponent implements OnInit {
   constructor(private todoService: TodoService) {
   }
 
-  toggleTodoComplete(id: number)
-  {
-    let index = this.todoList.findIndex(todo => todo.id === id);
-    this.todoList[index].complete = !this.todoList[index].complete;
-  }
-
   ngOnInit() {
     this.todoList = this.todoService.getTodoList();
   }

@@ -10,7 +10,6 @@ import {TodoService} from "../../services/todo.service";
 export class TodoListComponent implements OnInit {
 
   @Input() todoList: Array<TodoModel>;
-  @Output() todoClicked: EventEmitter<number> = new EventEmitter<number>();
   edited: number = -1;
   active: number = -1;
 
@@ -24,8 +23,10 @@ export class TodoListComponent implements OnInit {
   {
     if (this.edited !== id) {
       this.edited = -1;
-      if (this.todoService.getTodoById(id).isSubTodosComplete())
-        this.todoClicked.emit(id);
+
+      let todo = this.todoService.getTodoById(id);
+      if (todo.isSubTodosComplete())
+        todo.complete = !todo.complete;
     }
   }
 

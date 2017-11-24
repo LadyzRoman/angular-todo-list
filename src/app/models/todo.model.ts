@@ -6,8 +6,6 @@ export interface ITodo
   subTodos?: Array<TodoModel>
 }
 
-
-
 export class TodoModel
 {
   id: number;
@@ -30,10 +28,6 @@ export class TodoModel
       this.complete = false;
       this.subTodos = [];
     }
-  }
-
-  toggleComplete() {
-    this.complete = !this.complete;
   }
 
   hasSubTodos()
