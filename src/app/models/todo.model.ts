@@ -3,7 +3,7 @@ export interface ITodo
   id: number;
   title?: string;
   complete?: boolean;
-  subTodos?: Array<TodoModel>
+  subTodos?: Array<TodoModel>;
 }
 
 export class TodoModel
@@ -11,7 +11,7 @@ export class TodoModel
   id: number;
   title: string;
   complete: boolean;
-  subTodos: Array<TodoModel>
+  subTodos: Array<TodoModel>;
 
   constructor(model?: ITodo) {
     if (model)
@@ -28,15 +28,5 @@ export class TodoModel
       this.complete = false;
       this.subTodos = [];
     }
-  }
-
-  hasSubTodos()
-  {
-    return this.subTodos.length > 0;
-  }
-
-  isSubTodosComplete()
-  {
-    return this.subTodos.every(todo => todo.complete);
   }
 }

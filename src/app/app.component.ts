@@ -11,7 +11,6 @@ export class AppComponent implements OnInit {
 
   todoList: Array<TodoModel> = [];
 
-
   constructor(private todoService: TodoService) {
   }
 

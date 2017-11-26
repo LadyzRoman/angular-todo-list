@@ -23,7 +23,15 @@ export class TodoService
     return this.todoList[index];
   }
 
+  hasSubTodos(id: number)
+  {
+    return this.getTodoById(id).subTodos.length > 0;
+  }
 
+  isSubTodosComplete(id: number)
+  {
+    return this.getTodoById(id).subTodos.every(todo => todo.complete);
+  }
 
   deleteTodo(id: number)
   {
@@ -45,5 +53,9 @@ export class TodoService
   getNextId()
   {
     return this.initialId++;
+  }
+
+  toggleComplete(id: number) {
+    this.getTodoById(id).complete = !this.getTodoById(id).complete;
   }
 }

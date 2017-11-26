@@ -10,8 +10,8 @@ import {TodoService} from "../../services/todo.service";
 export class TodoListComponent implements OnInit {
 
   @Input() todoList: Array<TodoModel>;
-  edited: number = -1;
-  active: number = -1;
+  edited: number = null;
+  active: number = null;
 
 
   constructor(private todoService: TodoService) { }
@@ -22,11 +22,10 @@ export class TodoListComponent implements OnInit {
   todoClick(id: number)
   {
     if (this.edited !== id) {
-      this.edited = -1;
+      this.edited = null;
 
-      let todo = this.todoService.getTodoById(id);
-      if (todo.isSubTodosComplete())
-        todo.complete = !todo.complete;
+      if (this.todoService.isSubTodosComplete(id))
+        this.todoService.toggleComplete(id);
     }
   }
 
@@ -39,7 +38,7 @@ export class TodoListComponent implements OnInit {
       this.edited = id;
     }
     else
-      this.edited = -1;
+      this.edited = null;
   }
 
   deleteElement(id: number) {
@@ -49,13 +48,13 @@ export class TodoListComponent implements OnInit {
   toggleSubTodos(id: number, event: Event) {
     event.stopPropagation();
     if (this.active !== id) {
-      this.edited = -1;
+      this.edited = null;
       this.active = id;
     }
     else
     {
-      this.active = -1;
-      this.edited = -1;
+      this.active = null;
+      this.edited = null;
     }
   }
 
@@ -68,4 +67,15 @@ export class TodoListComponent implements OnInit {
     let subTodoIndex = todo.subTodos.findIndex(todo => todo.id === id);
     todo.subTodos[subTodoIndex].complete = !todo.subTodos[subTodoIndex].complete;
   }
+
+  hasSubTodos(id: number)
+  {
+    return this.todoService.hasSubTodos(id);
+  }
+
+  isSubTodosComplete(id: number)
+  {
+    return this.todoService.isSubTodosComplete(id);
+  }
+
 }

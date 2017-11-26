@@ -12,7 +12,7 @@ export class EditTodoComponent implements OnInit {
 
   editForm: FormGroup;
   @Input() _todo: TodoModel;
-  @Output() todoChange = new EventEmitter();
+  @Output() todoChange = new EventEmitter<void>();
 
   @Input()
   set todo(todo: TodoModel)
@@ -31,7 +31,6 @@ export class EditTodoComponent implements OnInit {
 
   ngOnInit() {
   }
-
 
   get subTodos() : FormArray {
     return this.editForm.get('subTodos') as FormArray;
