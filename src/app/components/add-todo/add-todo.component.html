@@ -1,3 +1,6 @@
+<h4 class="text-center text-success">
+  Add todo
+</h4>
 <form novalidate class="row"
       [formGroup]="addForm"
       (submit)="handleSubmit(addForm.value)">
@@ -42,9 +45,16 @@
         </button>
       </div>
       <p [hidden]="addForm.valid"
-        class="col-sm-10 text-danger danger">
+        class="col-sm-8 text-danger danger">
         {{getErrorMessage()}}
       </p>
+      <div class="col-sm-2"
+           [ngClass]="{'col-sm-offset-8': addForm.valid}">
+        <button class="btn btn-primary" type="button"
+                [routerLink]="''">
+          Back
+        </button>
+      </div>
     </div>
   </div>
 </form>

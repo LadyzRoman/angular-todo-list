@@ -1,6 +1,7 @@
 import {Component, EventEmitter, Input, OnInit, Output} from '@angular/core';
 import {TodoModel} from "../../models/todo.model";
 import {TodoService} from "../../services/todo.service";
+import {Router} from "@angular/router";
 
 @Component({
   selector: 'app-todo-list',
@@ -9,36 +10,26 @@ import {TodoService} from "../../services/todo.service";
 })
 export class TodoListComponent implements OnInit {
 
-  @Input() todoList: Array<TodoModel>;
-  edited: number = null;
+  todoList: Array<TodoModel>;
   active: number = null;
 
-
-  constructor(private todoService: TodoService) { }
+  constructor(private todoService: TodoService, private router: Router) { }
 
   ngOnInit() {
+    this.todoList = this.todoService.getTodoList();
   }
 
   todoClick(id: number)
   {
-    if (this.edited !== id) {
-      this.edited = null;
-
-      if (this.todoService.isSubTodosComplete(id))
-        this.todoService.toggleComplete(id);
-    }
+    if (this.todoService.isSubTodosComplete(id))
+      this.todoService.toggleComplete(id);
   }
 
   toggleEdit(id: number, event: Event)
   {
     if (event)
       event.stopPropagation();
-
-    if (this.edited !== id) {
-      this.edited = id;
-    }
-    else
-      this.edited = null;
+    this.router.navigate(['/edit', id]);
   }
 
   deleteElement(id: number) {
@@ -48,13 +39,11 @@ export class TodoListComponent implements OnInit {
   toggleSubTodos(id: number, event: Event) {
     event.stopPropagation();
     if (this.active !== id) {
-      this.edited = null;
       this.active = id;
     }
     else
     {
       this.active = null;
-      this.edited = null;
     }
   }
 

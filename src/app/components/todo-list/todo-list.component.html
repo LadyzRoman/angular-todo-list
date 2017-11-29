@@ -1,3 +1,10 @@
+<div class="row add-button">
+  <div class="col-sm-12">
+    <button class="btn btn-block btn-success" type="button" [routerLink]="'/add'">
+      <i class="glyphicon glyphicon-plus"></i>
+    </button>
+  </div>
+</div>
 <ul class="list-group">
   <li class="list-group-item" *ngFor="let todo of todoList"
       (click)="todoClick(todo.id)"
@@ -50,7 +57,7 @@
     </div>
 
     <ng-template #editForm>
-      <app-edit-todo [todo]="todo" (todoChange)="toggleEdit(todo.id)"></app-edit-todo>
+      <app-edit-todo></app-edit-todo>
     </ng-template>
 
   </li>

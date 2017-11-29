@@ -2,6 +2,7 @@ import {Component, EventEmitter, Input, OnInit, Output} from '@angular/core';
 import {FormArray, FormControl, FormGroup, Validators} from "@angular/forms";
 import {TodoModel} from "../../models/todo.model";
 import {TodoService} from "../../services/todo.service";
+import {ActivatedRoute, Router} from "@angular/router";
 
 @Component({
   selector: 'app-edit-todo',
@@ -11,10 +12,8 @@ import {TodoService} from "../../services/todo.service";
 export class EditTodoComponent implements OnInit {
 
   editForm: FormGroup;
-  @Input() _todo: TodoModel;
-  @Output() todoChange = new EventEmitter<void>();
+  _todo: TodoModel;
 
-  @Input()
   set todo(todo: TodoModel)
   {
     this._todo = todo;
@@ -27,9 +26,16 @@ export class EditTodoComponent implements OnInit {
     return this._todo;
   }
 
-  constructor(private todoService: TodoService) { }
+  constructor(private todoService: TodoService,
+              private router: Router,
+              private route: ActivatedRoute)
+  {}
 
   ngOnInit() {
+    let id: number = null;
+    this.route.params
+      .subscribe(params => id = params['id'] as number);
+    this.todo = this.todoService.getTodoById(+id);
   }
 
   get subTodos() : FormArray {
@@ -87,8 +93,9 @@ export class EditTodoComponent implements OnInit {
 
   handleSubmit(value : any)
   {
-    this.todoService.updateTodo(Object.assign(new TodoModel(), value));
-    this.todoChange.emit();
+    this.todo = Object.assign(new TodoModel(), value);
+    this.todoService.updateTodo(this.todo);
+    this.router.navigate(['']);
   }
 
 }

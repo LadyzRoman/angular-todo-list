@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import {FormArray, FormControl, FormGroup, Validators} from "@angular/forms";
 import {TodoService} from "../../services/todo.service";
 import {TodoModel} from "../../models/todo.model";
+import {Router} from "@angular/router";
 
 @Component({
   selector: 'app-add-todo',
@@ -17,7 +18,7 @@ export class AddTodoComponent implements OnInit {
   }
 
 
-  constructor(private todoService: TodoService) { }
+  constructor(private todoService: TodoService, private router: Router) { }
 
   ngOnInit() {
     this.refreshForm();
@@ -26,7 +27,8 @@ export class AddTodoComponent implements OnInit {
 
   handleSubmit(value: any) {
     this.todoService.addTodo(Object.assign(new TodoModel(), value));
-    this.refreshForm()
+    this.refreshForm();
+    this.router.navigate(['']);
   }
 
   refreshForm()
